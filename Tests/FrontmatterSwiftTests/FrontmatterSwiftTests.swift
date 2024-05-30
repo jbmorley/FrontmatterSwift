@@ -1,7 +1,7 @@
 import XCTest
 @testable import Frontmatter
 
-final class FrontmatterTests: XCTestCase {
+final class FrontmatterSwiftTests: XCTestCase {
 
     func testExample() throws {
     }
