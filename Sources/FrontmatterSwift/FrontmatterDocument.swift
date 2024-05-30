@@ -24,61 +24,38 @@ import Foundation
 
 import Yams
 
-enum FrontmatterError: Error {
+public struct FrontmatterDocument {
 
-    case encodingError
-
-}
-
-struct Metadata: Codable {
-
-}
-
-struct Fudge {
     static let frontmatterRegEx = /(?s)^(---\n)(?<metadata>.*?)(---)(\n(?<content>.*))?$/
-}
 
-protocol FrontmatterMetadata: Codable {
-
-    init()
-
-}
-
-
-struct FrontmatterDocument<Metadata: FrontmatterMetadata> {
-
-    let metadata: Dictionary<AnyHashable, Any>
-    let structure: Metadata
+    public let metadata: Dictionary<AnyHashable, Any>
     let content: String
 
-    init(type: Metadata.Type, contents: String) throws {
+    public init(contents: String) throws {
 
         // Sometimes we see 'line separator' characters (Unicode 2028) in image and video descriptions (thanks Photos),
         // so we blanket replace these with new lines to be more forgiving.
         let contents = contents.replacingOccurrences(of: "\u{2028}", with: "\n")
 
-        guard let match = contents.wholeMatch(of: Fudge.frontmatterRegEx) else {
-            structure = Metadata()
+        guard let match = contents.wholeMatch(of: Self.frontmatterRegEx) else {
             metadata = [:]
             content = contents
             return
         }
 
         let yaml = String(match.metadata)
-        structure = (!yaml.isEmpty ?
-                     try YAMLDecoder().decode(Metadata.self, from: yaml) : Metadata())
         metadata = try YAMLDecoder().decode(DictionaryWrapper.self, from: yaml).dictionary
 
         let content = String(match.content ?? "")
         self.content = content
     }
 
-    init(type: Metadata.Type, contentsOf url: URL) throws {
+    public init(contentsOf url: URL) throws {
         let data = try Data(contentsOf: url)
         guard let contents = String(data: data, encoding: .utf8) else {
             throw FrontmatterError.encodingError
         }
-        try self.init(type: type, contents: contents)
+        try self.init(contents: contents)
     }
 
 }
