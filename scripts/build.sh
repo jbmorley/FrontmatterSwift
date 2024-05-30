@@ -11,6 +11,6 @@ ROOT_DIRECTORY="${SCRIPT_DIRECTORY}/.."
 
 cd "$ROOT_DIRECTORY"
 
-xcodebuild -scheme Frontmatter -showdestinations
-xcodebuild -scheme Frontmatter -destination "platform=macOS" clean build
-xcodebuild -scheme Frontmatter -destination "platform=iOS Simulator,name=iPhone 14 Pro" clean build
+xcodebuild -scheme FrontmatterSwift -showdestinations
+xcodebuild -scheme FrontmatterSwift -destination "platform=macOS" clean build
+xcodebuild -scheme FrontmatterSwift -destination "platform=iOS Simulator,name=iPhone 14 Pro" clean build

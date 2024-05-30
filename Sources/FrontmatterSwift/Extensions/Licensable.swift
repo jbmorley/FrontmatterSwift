@@ -22,19 +22,19 @@ import Foundation
 
 import Licensable
 
-fileprivate let frontmatterLicense = License(id: "https://github.com/jbmorley/Frontmatter",
-                                             name: "Frontmatter",
-                                             author: "Jason Morley",
-                                             text: String(contentsOfResource: "frontmatter-license"),
-                                             attributes: [
-                                               .url(URL(string: "https://github.com/jbmorley/Frontmatter")!, title: "GitHub"),
-                                             ],
-                                             licenses: [
-                                               .licensable,
-                                             ])
+fileprivate let frontmatterSwiftLicense = License(id: "https://github.com/jbmorley/FrontmatterSwift",
+                                                  name: "FrontmatterSwift",
+                                                  author: "Jason Morley",
+                                                  text: String(contentsOfResource: "frontmatterswift-license"),
+                                                  attributes: [
+                                                    .url(URL(string: "https://github.com/jbmorley/FrontmatterSwift")!, title: "GitHub"),
+                                                  ],
+                                                  licenses: [
+                                                    .licensable,
+                                                  ])
 
 extension Licensable where Self == License {
 
-    public static var frontmatter: License { frontmatterLicense }
+    public static var frontmatterSwift: License { frontmatterSwiftLicense }
 
 }

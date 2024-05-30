@@ -3,29 +3,27 @@
 import PackageDescription
 
 let package = Package(
-    name: "Frontmatter",
+    name: "FrontmatterSwift",
     platforms: [.iOS(.v17), .macOS(.v14)],
     products: [
         .library(
-            name: "Frontmatter",
-            targets: ["Frontmatter"]),
+            name: "FrontmatterSwift",
+            targets: ["FrontmatterSwift"]),
     ],
     dependencies: [
         .package(url: "https://github.com/inseven/licensable", from: "0.0.13"),
-        /* .package(url: "https://github.com/saramah/HashRainbow", branch: "main"), */
     ],
     targets: [
         .target(
-            name: "Frontmatter",
+            name: "FrontmatterSwift",
             dependencies: [
-                /* .product(name: "HashRainbow", package: "HashRainbow"), */
                 .product(name: "Licensable", package: "licensable"),
             ],
             resources: [
                 .process("Resources"),
             ]),
         .testTarget(
-            name: "FrontmatterTests",
-            dependencies: ["Frontmatter"]),
+            name: "FrontmatterSwiftTests",
+            dependencies: ["FrontmatterSwift"]),
     ]
 )
