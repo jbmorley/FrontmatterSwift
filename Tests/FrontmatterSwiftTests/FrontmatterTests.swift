@@ -25,20 +25,10 @@ import Foundation
 import XCTest
 @testable import FrontmatterSwift
 
-struct Metadata: FrontmatterMetadata {
-
-    let title: String?
-
-    init() {
-        title = nil
-    }
-
-}
-
 class FrontmatterTests: XCTestCase {
 
     func testUnstructuredParsing() throws {
-        let document = try FrontmatterDocument(type: Metadata.self, contents: """
+        let document = try FrontmatterDocument(contents: """
 ---
 template: tags.html
 title: Tags
@@ -52,7 +42,6 @@ Here's some **Markdown** content
 """)
 
         XCTAssertEqual(document.content, "Here's some **Markdown** content")
-        XCTAssertEqual(document.structure.title, "Tags")
         let metadata: [AnyHashable: Any] = ["template": "tags.html",
                                             "title": "Tags",
                                             "category": "pages",
