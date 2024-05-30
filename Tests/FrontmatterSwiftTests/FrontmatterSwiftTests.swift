@@ -1,5 +1,5 @@
 import XCTest
-@testable import Frontmatter
+@testable import FrontmatterSwift
 
 final class FrontmatterSwiftTests: XCTestCase {
 
