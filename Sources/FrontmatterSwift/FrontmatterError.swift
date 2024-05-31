@@ -22,34 +22,8 @@
 
 import Foundation
 
-import XCTest
-@testable import FrontmatterSwift
+public enum FrontmatterError: Error {
 
-class FrontmatterTests: XCTestCase {
-
-    func testUnstructuredParsing() throws {
-        let document = try FrontmatterDocument(contents: """
----
-template: tags.html
-title: Tags
-category: pages
-queries:
-  posts:
-    include:
-    - general
----
-Here's some **Markdown** content
-""")
-
-        XCTAssertEqual(document.content, "Here's some **Markdown** content")
-        let metadata: [AnyHashable: Any] = ["template": "tags.html",
-                                            "title": "Tags",
-                                            "category": "pages",
-                                            "queries":
-                                                ["posts":
-                                                    ["include":
-                                                        ["general"]]]]
-        XCTAssertEqual(document.metadata as NSObject, metadata as NSObject)
-    }
+    case encodingError
 
 }

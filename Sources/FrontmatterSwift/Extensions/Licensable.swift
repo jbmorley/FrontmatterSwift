@@ -22,6 +22,14 @@ import Foundation
 
 import Licensable
 
+fileprivate let yamsLicense = License(id: "https://github.com/jpsim/Yams",
+                                      name: "Yams",
+                                      author: "JP Simard",
+                                      text: String(contentsOfResource: "yams-license"),
+                                      attributes: [
+                                        .url(URL(string: "https://github.com/jpsim/Yams")!, title: "GitHub"),
+                                      ])
+
 fileprivate let frontmatterSwiftLicense = License(id: "https://github.com/jbmorley/FrontmatterSwift",
                                                   name: "FrontmatterSwift",
                                                   author: "Jason Morley",
@@ -31,6 +39,7 @@ fileprivate let frontmatterSwiftLicense = License(id: "https://github.com/jbmorl
                                                   ],
                                                   licenses: [
                                                     .licensable,
+                                                    yamsLicense,
                                                   ])
 
 extension Licensable where Self == License {
