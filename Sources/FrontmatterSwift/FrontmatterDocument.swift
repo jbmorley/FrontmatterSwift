@@ -31,7 +31,7 @@ public struct FrontmatterDocument {
     public let metadata: Dictionary<AnyHashable, Any>
     public let content: String
 
-    public init(contents: String) throws {
+    public init(contents: String, options: DecodeOptions = DecodeOptions()) throws {
 
         // Sometimes we see 'line separator' characters (Unicode 2028) in image and video descriptions (thanks Photos),
         // so we blanket replace these with new lines to be more forgiving.
@@ -44,13 +44,13 @@ public struct FrontmatterDocument {
         }
 
         let yaml = String(match.metadata)
-        metadata = try YAMLDecoder().decode(DictionaryWrapper.self, from: yaml).dictionary
+        metadata = try YAMLDecoder().decode(DictionaryWrapper.self, from: yaml, userInfo: [.decodeOptions: options]).dictionary
 
         let content = String(match.content ?? "")
         self.content = content
     }
 
-    public init(contentsOf url: URL) throws {
+    public init(contentsOf url: URL, options: DecodeOptions = DecodeOptions()) throws {
         let data = try Data(contentsOf: url)
         guard let contents = String(data: data, encoding: .utf8) else {
             throw FrontmatterError.encodingError
