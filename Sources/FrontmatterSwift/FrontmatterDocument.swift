@@ -29,7 +29,7 @@ public struct FrontmatterDocument {
     static let frontmatterRegEx = /(?s)^(---\n)(?<metadata>.*?)(---)(\n(?<content>.*))?$/
 
     public let metadata: Dictionary<AnyHashable, Any>
-    let content: String
+    public let content: String
 
     public init(contents: String) throws {
 
