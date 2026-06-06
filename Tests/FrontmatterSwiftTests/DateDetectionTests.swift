@@ -22,15 +22,35 @@
 
 import Foundation
 
-struct DictionaryWrapper: Decodable {
+import XCTest
+@testable import FrontmatterSwift
 
-    let dictionary: [String: Any]
+class DateDetectionTests: XCTestCase {
 
-    init(from decoder: Decoder) throws {
-        let options = decoder.userInfo[.decodeOptions] as? DecodeOptions ?? DecodeOptions()
-        let container = try decoder.container(keyedBy: UnknownCodingKeys.self)
-        self.dictionary = try container
-            .decode(Dictionary<String, Any>.self, options: options)
+    func testDateDetection() throws {
+        let document = try FrontmatterDocument(contents: """
+---
+date: 2024-01-17T17:53:07-1000
+---
+""")
+
+        XCTAssertEqual(document.content, "")
+        let metadata: [AnyHashable: Any] = ["date": Date(2024, 01, 17, 17, 53, 07, timeZone: TimeZone(-10)!)]
+        XCTAssertEqual(document.metadata as NSObject, metadata as NSObject)
+    }
+
+    func testDateDetectionDisabled() throws {
+        var options = DecodeOptions()
+        options.detectDates = false
+        let document = try FrontmatterDocument(contents: """
+---
+date: 2024-01-17T17:53:07-1000
+---
+""", options: options)
+
+        XCTAssertEqual(document.content, "")
+        let metadata: [AnyHashable: Any] = ["date": "2024-01-17T17:53:07-1000"]
+        XCTAssertEqual(document.metadata as NSObject, metadata as NSObject)
     }
 
 }

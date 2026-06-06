@@ -22,15 +22,12 @@
 
 import Foundation
 
-struct DictionaryWrapper: Decodable {
+public struct DecodeOptions {
 
-    let dictionary: [String: Any]
+    public var detectDates: Bool
 
-    init(from decoder: Decoder) throws {
-        let options = decoder.userInfo[.decodeOptions] as? DecodeOptions ?? DecodeOptions()
-        let container = try decoder.container(keyedBy: UnknownCodingKeys.self)
-        self.dictionary = try container
-            .decode(Dictionary<String, Any>.self, options: options)
+    public init() {
+        self.detectDates = true
     }
 
 }

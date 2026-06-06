@@ -27,31 +27,31 @@ import Foundation
 
 extension KeyedDecodingContainer {
 
-    func decode(_ type: Dictionary<String, Any>.Type, forKey key: K) throws -> Dictionary<String, Any> {
+    func decode(_ type: Dictionary<String, Any>.Type, forKey key: K, options: DecodeOptions) throws -> Dictionary<String, Any> {
         let container = try self.nestedContainer(keyedBy: UnknownCodingKeys.self, forKey: key)
-        return try container.decode(type)
+        return try container.decode(type, options: options)
     }
 
-    func decodeIfPresent(_ type: Dictionary<String, Any>.Type, forKey key: K) throws -> Dictionary<String, Any>? {
+    func decodeIfPresent(_ type: Dictionary<String, Any>.Type, forKey key: K, options: DecodeOptions) throws -> Dictionary<String, Any>? {
         guard contains(key) else {
             return nil
         }
-        return try decode(type, forKey: key)
+        return try decode(type, forKey: key, options: options)
     }
 
-    func decode(_ type: Array<Any>.Type, forKey key: K) throws -> Array<Any> {
+    func decode(_ type: Array<Any>.Type, forKey key: K, options: DecodeOptions) throws -> Array<Any> {
         var container = try self.nestedUnkeyedContainer(forKey: key)
-        return try container.decode(type)
+        return try container.decode(type, options: options)
     }
 
-    func decodeIfPresent(_ type: Array<Any>.Type, forKey key: K) throws -> Array<Any>? {
+    func decodeIfPresent(_ type: Array<Any>.Type, forKey key: K, options: DecodeOptions) throws -> Array<Any>? {
         guard contains(key) else {
             return nil
         }
-        return try decode(type, forKey: key)
+        return try decode(type, forKey: key, options: options)
     }
 
-    func decode(_ type: Dictionary<String, Any>.Type) throws -> Dictionary<String, Any> {
+    func decode(_ type: Dictionary<String, Any>.Type, options: DecodeOptions) throws -> Dictionary<String, Any> {
         var dictionary = Dictionary<String, Any>()
 
         for key in allKeys {
@@ -62,14 +62,14 @@ extension KeyedDecodingContainer {
                     dictionary[key.stringValue] = intValue
                 } else if let doubleValue = Double(stringValue) {
                     dictionary[key.stringValue] = doubleValue
-                } else if let dateValue = DateParser.default.date(from: stringValue) {
+                } else if options.detectDates, let dateValue = DateParser.default.date(from: stringValue) {
                     dictionary[key.stringValue] = dateValue
                 } else {
                     dictionary[key.stringValue] = stringValue
                 }
-            } else if let nestedDictionary = try? decode(Dictionary<String, Any>.self, forKey: key) {
+            } else if let nestedDictionary = try? decode(Dictionary<String, Any>.self, forKey: key, options: options) {
                 dictionary[key.stringValue] = nestedDictionary
-            } else if let nestedArray = try? decode(Array<Any>.self, forKey: key) {
+            } else if let nestedArray = try? decode(Array<Any>.self, forKey: key, options: options) {
                 dictionary[key.stringValue] = nestedArray
             }
         }

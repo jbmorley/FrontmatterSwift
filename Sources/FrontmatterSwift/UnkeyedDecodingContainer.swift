@@ -25,9 +25,13 @@
 
 import Foundation
 
+extension CodingUserInfoKey {
+    static let decodeOptions = CodingUserInfoKey(rawValue: "decodeOptions")!
+}
+
 extension UnkeyedDecodingContainer {
 
-    mutating func decode(_ type: Array<Any>.Type) throws -> Array<Any> {
+    mutating func decode(_ type: Array<Any>.Type, options: DecodeOptions) throws -> Array<Any> {
         var array: [Any] = []
         while isAtEnd == false {
             if let value = try? decode(Bool.self) {
@@ -37,23 +41,23 @@ extension UnkeyedDecodingContainer {
                     array.append(int)
                 } else if let double = Double(string) {
                     array.append(double)
-                } else if let date = DateParser.default.date(from: string) {
+                } else if options.detectDates, let date = DateParser.default.date(from: string) {
                     array.append(date)
                 } else {
                     array.append(string)
                 }
-            } else if let nestedDictionary = try? decode(Dictionary<String, Any>.self) {
+            } else if let nestedDictionary = try? decode(Dictionary<String, Any>.self, options: options) {
                 array.append(nestedDictionary)
-            } else if let nestedArray = try? decode(Array<Any>.self) {
+            } else if let nestedArray = try? decode(Array<Any>.self, options: options) {
                 array.append(nestedArray)
             }
         }
         return array
     }
 
-    mutating func decode(_ type: Dictionary<String, Any>.Type) throws -> Dictionary<String, Any> {
+    mutating func decode(_ type: Dictionary<String, Any>.Type, options: DecodeOptions) throws -> Dictionary<String, Any> {
         let nestedContainer = try self.nestedContainer(keyedBy: UnknownCodingKeys.self)
-        return try nestedContainer.decode(type)
+        return try nestedContainer.decode(type, options: options)
     }
 
 }
